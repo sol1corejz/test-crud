@@ -1,0 +1,6 @@
+server:
+  address: ":8080"       # Адрес, на котором запускается сервер
+
+storage:
+  type: "postgres"       # Тип хранилища: postgres
+  connection_string: "postgres://postgres:12345678@localhost:5432/tasks"
