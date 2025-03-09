@@ -70,6 +70,7 @@ func (storage StorageImpl) ConnectDB(cfg *configs.Config) error {
 
 }
 
+// CreateTask добавляет новую задачу
 func (storage StorageImpl) CreateTask(t models.Task) error {
 	_, err := storage.DB.Exec(`
 		INSERT INTO tasks (title, description, status) VALUES ($1, $2, $3)
@@ -82,6 +83,8 @@ func (storage StorageImpl) CreateTask(t models.Task) error {
 
 	return nil
 }
+
+// GetTasks получает список задач
 func (storage StorageImpl) GetTasks() ([]models.RawTask, error) {
 	rows, err := storage.DB.Query(`
 		SELECT * FROM tasks
@@ -115,6 +118,8 @@ func (storage StorageImpl) GetTasks() ([]models.RawTask, error) {
 
 	return tasks, nil
 }
+
+// UpdateTask обновляет задачу
 func (storage StorageImpl) UpdateTask(id int, t models.Task) error {
 	_, err := storage.DB.Exec(`
 		UPDATE tasks SET title = $1, description = $2, status = $3, updated_at = $4 WHERE id = $5
@@ -127,6 +132,8 @@ func (storage StorageImpl) UpdateTask(id int, t models.Task) error {
 
 	return nil
 }
+
+// DeleteTask удаляет задачу
 func (storage StorageImpl) DeleteTask(id int) error {
 	_, err := storage.DB.Exec(`DELETE FROM tasks WHERE id = $1`, id)
 	if err != nil {

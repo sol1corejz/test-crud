@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// DeleteTask - функция для удаления задачи
 func DeleteTask(c *fiber.Ctx) error {
 
 	// Получение id задачи из параметров запроса

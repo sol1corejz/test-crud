@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// UpdateTask - функция для обновления задачи
 func UpdateTask(c *fiber.Ctx) error {
 
 	// Получение id задачи из параметров запроса

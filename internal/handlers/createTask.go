@@ -8,6 +8,7 @@ import (
 	"log"
 )
 
+// PostTasks - функция для создания задачи
 func PostTasks(c *fiber.Ctx) error {
 
 	// Парсинг входных данных
