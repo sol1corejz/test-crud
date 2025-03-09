@@ -1,7 +1,11 @@
 package main
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/sol1corejz/test-crud/configs"
 	"github.com/sol1corejz/test-crud/internal/handlers"
 	"github.com/sol1corejz/test-crud/internal/storage"
@@ -9,12 +13,17 @@ import (
 )
 
 func main() {
-
 	// Загрузка конфига
 	config, err := configs.LoadConfig("configs/config.yaml")
 	if err != nil {
 		log.Print("Ошибка загрузки конфига:", err)
 		return
+	}
+
+	// Миграация
+	err = migrateDB()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// Подключение к бд
@@ -37,4 +46,22 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func migrateDB() error {
+	m, err := migrate.New(
+		"file://migrations",
+		"postgres://postgres:12345678@localhost:5432/tasks?sslmode=disable",
+	)
+	if err != nil {
+		return err
+	}
+
+	// Применение всех миграций
+	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+		return err
+	}
+
+	log.Println("Миграции успешно применены!")
+	return nil
 }

@@ -50,22 +50,6 @@ func (storage StorageImpl) ConnectDB(cfg *configs.Config) error {
 	storage.DB = db
 	DBStorage.DB = db
 
-	// Создаем таблицу tasks, если она отсутствует
-	_, err = storage.DB.Exec(`
-		CREATE TABLE IF NOT EXISTS tasks (
-			id SERIAL PRIMARY KEY,
-			title TEXT NOT NULL,
-			description TEXT,
-			status TEXT CHECK (status IN ('new', 'in_progress', 'done')) DEFAULT 'new',
-			created_at TIMESTAMP DEFAULT now(),
-			updated_at TIMESTAMP DEFAULT now()
-		)
-	`)
-	if err != nil {
-		log.Fatal("failed to create tasks table:", err)
-		return err
-	}
-
 	return nil
 
 }
